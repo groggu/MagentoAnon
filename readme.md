@@ -33,34 +33,42 @@ Currently, the anonymized fields are -
  1. order, quote 
     * 'customer_firstname'   => ['const', 'anon'],
     * 'customer_middlename'  => ['remove'], 
-    * 'customer_lastname'    =>['lastname'], 
+    * 'customer_lastname'    => ['lastname'], 
     * 'customer_email'       => ['email'], 
-    * 'remote_ip'   => ['remove'], 
+    * 'remote_ip'            => ['remove'], 
     * 'customer_dob'         => ['remove'], 
     * 'customer_gender'      => ['remove'],
+				
  2. order address, quote address 
     * 'firstname'            => ['const',   'anon'], 
     * 'middlename'           => ['remove'], 
-    * 'lastname'            => ['lastname'], 
+    * 'lastname'             => ['lastname'], 
     * 'company'              => ['remove'], 
     * 'vat_id'               => ['remove'], 
     * 'street'               => ['street'], 
     * 'city'                 => ['const', 'Anytown'], 
     * 'email'                => ['email'], 
     * 'telephone'            => ['const', '********'],
+ 
  3. order grid, invoice grid, shipment grid, credit memo grid
     * 'shipping_name'        => ['name'], 
     * 'billing_name'         => ['name'],
+ 
  4. order payment, invoice payment 
     * 'cc_owner'             => ['name'],
     * 'cc_last4'             => ['const', '****'], 
-    * 'cc_number_enc'       => ['remove'], 
+    * 'cc_number_enc'        => ['remove'], 
     * 'cc_exp_month'         => ['const', '\*\*'], 
     * 'cc_exp_year'          => ['const', '\*\*'], 
     * 'cybersource_token'    => ['remove'],
+    * 'additional_information'=> ['remove'],
  
  5. customer 
     * 'password_hash'        => ['remove'],
+    
+ 6. shipment tracking
+    * 'number'               => ['const', '************'],
+    * 'track_number'         => ['const', '************'],
 
 ## Installation
 
@@ -68,38 +76,30 @@ To install, checkout anonymize.php and place it on the shell directory.
 
   
 ## Using
-To run, start a command line (ssh, terminal, whatever) session and navigate to Magneto's
+To run, start a command line (ssh, terminal, whatever) session and navigate to Magneto's shell directory and run the command -
 
-shell directory and run the command -
-
-    php anonymize.php <options>   *website <website code or id>   *email <email address>
-
-  
+    php anonymize.php <options>  --website <website code or id>  --email <email address>
 
 ## Command Usage
 
-  
+    Usage: php -f anonymize.php.php  [options]   --website <website_code>    --email <email_address>
+    
+      --email <email_address> 	 Customer email address (required)
+      --website <website_code> 	Magento website code or id (required)
+    
+    customer		Anonymizes customer data, saved addresses and order information.
+    orders			Anonymizes customer order/quote item    
+    wishlist		Removes customer wishlists  
+    alerts			Removes customer product stock & price alerts  
+    misc			Removes customer wishlists, product stock & price alerts  
+    all			Do all Checks/Removals|Anonymizations (default)   
+    
+    force			Run without confirming
+				quiet			Run without output
+    test			Make no changes to data
+    debug			Enables additional messaging and output of log file (anon.log)
+    
+    help			This help
 
-    Usage: php -f anonymize.php.php   * [options]   *website <website_code>    *email <email_address>
-    
-      *email <email_address> 	Customer email address (required)
-    
-      *website <website_code> 	Magento website code or id (required)
-    
-    customer 			Anonymizes customer data, saved addresses and order information.
-    orders 				Anonymizes customer order/quote item    
-    wishlist 			Removes customer wishlists  
-    alerts 				Removes customer product stock & price alerts  
-    misc 				Removes customer wishlists, product stock & price alerts  
-    all 				Do all Checks/Removals|Anonymizations (default)
-    
-    
-    force 				Run without confirming
-    quiet 				Run without output
-    test 				Make no changes to data
-    
-    debug 				Enables additional messaging and output of log file (anon.log)
-    
-    help 				This help
-
-All data information based on docs provided by Magento - https://devdocs.magento.com/compliance/privacy/pi-data-reference-m1.html
+All data information based on docs provided by Magento 
+See - https://devdocs.magento.com/compliance/privacy/pi-data-reference-m1.html
