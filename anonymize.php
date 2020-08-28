@@ -65,6 +65,10 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
 
             //customer
             'password_hash'        => ['remove'],
+
+            //tracks
+            'number'                => ['const', '************'],
+            'track_number'          => ['const', '************'],
         ];
 
     function __construct()
@@ -143,7 +147,7 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
                     ->loadByEmail($this->_customerEmail);
 
                 if (!$customer->getId()) {
-                    $err = "Error - no customer with email address {$this->_customerEmail} in database\n";
+                    $err = "Error - no customer with email address {$this->_customerEmail} for website {$this->_websiteName}\n";
                     if ($this->_debug) {
                         $this->_log($err);
                     }
@@ -151,7 +155,7 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
                     return false;
                 }
                 // only fetch this once
-                $this->_alert("\nCustomer with email address {$this->_customerEmail} in database");
+                $this->_alert("\nCustomer with email address {$this->_customerEmail} found for website {$this->_websiteName}");
                 $this->_customer = $customer;
             }
         }
@@ -280,7 +284,7 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
      */
     private function _anonymizeCustomerData()
     {
-        $this->_alert("Process customer data for {$this->_customerEmail}");
+        $this->_alert("Process customer data for {$this->_customerEmail} on website {$this->_websiteName}");
 
         if (!$customer = $this->_getCustomer()) {
             //cant find customer
@@ -333,13 +337,15 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
      */
     private function _anonymizeOrderData()
     {
-        $this->_alert("Process order data for {$this->_customerEmail}");
+        $this->_alert("Process order data for {$this->_customerEmail} on website {$this->_websiteName}");
         $saveOrder = Mage::getModel('core/resource_transaction'); // setup transaction
 
         if ($customer = $this->_getCustomer()) {
             // if removing for a customer, then get customer id as key
             $this->_anonId = $customer->getId();
         }
+
+        //$this->_alert("{$this->_customerEmail} --> {$this->_anonId}@nowhere.anon");
 
         //quotes
         $quoteCollection = Mage::getModel('sales/quote')
@@ -418,81 +424,23 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
             }
             $this->_alert("Anonymized $count payment records");
 
-            $gridCollection = Mage::getResourceModel('sales/order_grid_collection')
-                ->addFieldToFilter('entity_id', $order->getId());
 
-            foreach ($gridCollection as $gridOrder) {
-                $this->_anonymize($gridOrder);
-                $saveOrder->addObject($gridOrder);
-                $this->_debugEcho($gridOrder);
-            }
-
-            //invoices
-            foreach ($order->getInvoiceCollection() as $invoice) {
-                $this->_debugEcho($invoice);
-                // no need to update the invoice
-
-                //update the invoice grid records
-                $gridCollection = Mage::getResourceModel('sales/order_invoice_grid_collection')
-                    ->addFieldToFilter('entity_id', $invoice->getId());
-
-                $count = 0;
-                foreach ($gridCollection as $gridInvoice) {
-                    $this->_anonymize($gridInvoice);
-                    $saveOrder->addObject($gridInvoice);
-                    $this->_debugEcho($gridInvoice);
-                    $count++;
-                }
-                $this->_alert("Anonymized $count invoices");
-
-            }
-
-            //shipments
+            //shipments tracks
             foreach ($order->getShipmentsCollection() as $shipment) {
                 $this->_debugEcho($shipment);
                 // no need to update the shipment
 
-                //update the shipment grid records
-                $gridCollection = Mage::getResourceModel('sales/order_shipment_grid_collection')
-                    ->addFieldToFilter('entity_id', $shipment->getId());
-
                 $count = 0;
-                foreach ($gridCollection as $gridShipment) {
-                    $this->_anonymize($gridShipment);
-                    $saveOrder->addObject($gridShipment);
-                    $this->_debugEcho($gridShipment);
+                /*** @var $track Mage_Sales_Model_Order_Shipment_Track $track */
+                foreach ($shipment->getTracksCollection() as $track) {
+                    $this->_anonymize($track);
+                    $saveOrder->addObject($track);
+                    $this->_debugEcho($track);
                     $count++;
                 }
-                $this->_alert("Anonymized $count shipments");
+                $this->_alert("Anonymized $count shipment tracks");
 
             }
-
-            //credit memos
-            foreach ($order->getCreditmemosCollection() as $creditMemo) {
-                $this->_debugEcho($creditMemo);
-                // no need to update the shipment
-
-                //update the shipment grid records
-                $gridCollection = Mage::getResourceModel('sales/order_creditmemo_grid_collection')
-                    ->addFieldToFilter('entity_id', $creditMemo->getId());
-                $count = 0;
-                foreach ($gridCollection as $gridCM) {
-                    $this->_anonymize($gridCM);
-                    $saveOrder->addObject($gridCM);
-                    $this->_debugEcho($gridCM);
-                    $count++;
-                }
-                $this->_alert("Anonymized $count credit memos");
-            }
-
-            /*
-            if ($this->_isEnterprise) { //then boldly go!
-                //TBD find out how to remove/update Enterprise Archive records
-                if($archive=Mage::getModel('enterprise_salesarchive/archive')->load($order->getId())){
-                   echo print_r($archive->getData(),true);
-                }
-            }
-            */
         }
         $this->_alert("Anonymized $ordercount orders");
 
@@ -527,7 +475,7 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
      */
     private function _removeAlerts()
     {
-        $this->_alert("\nProcess alert data for {$this->_customerEmail}");
+        $this->_alert("\nRemove alert data for {$this->_customerEmail} on website {$this->_websiteName}");
         if (!$customer = $this->_getCustomer()) {
             //cant find customer
             return;
@@ -579,7 +527,7 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
      */
     private function _removeWishlists()
     {
-        $this->_alert("\nProcess wishlist data for {$this->_customerEmail}");
+        $this->_alert("\nRemove wishlist data for {$this->_customerEmail} on website {$this->_websiteName}");
         if (!$customer = $this->_getCustomer()) {
             //cant find customer
             return;
