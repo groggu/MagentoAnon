@@ -32,9 +32,6 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
     protected $_anonymizeMapping
         = [
             //order, quote
-            'customer_first_name'  => ['const', 'anon'],
-            'customer_middle_name' => ['remove'],
-            'customer_last_name'   => ['lastname'],
             'customer_firstname'   => ['const', 'anon'],
             'customer_middlename'  => ['remove'],
             'customer_lastname'    => ['anonid'],
