@@ -63,7 +63,7 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
             'cc_exp_year'            => ['const', '**'],
             'cybersource_token'      => ['remove'],
             'additional_information' => ['remove'],
-            
+
 
             //customer
             'password_hash'          => ['remove'],
@@ -239,6 +239,7 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
         } else {
             // default to all
             $this->_action = $this::ACTION_HELP;
+            $this->_alert("\nNo action selected, please specify an action (e.g. all, customer, orders)\n");
             return true;
         }
 
