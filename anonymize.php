@@ -32,43 +32,45 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
     protected $_anonymizeMapping
         = [
             //order, quote
-            'customer_firstname'   => ['const', 'anon'],
-            'customer_middlename'  => ['remove'],
-            'customer_lastname'    => ['anonid'],
-            'customer_email'       => ['email'],
-            'remote_ip'            => ['remove'],
-            'customer_dob'         => ['remove'],
-            'customer_gender'      => ['remove'],
+            'customer_firstname'     => ['const', 'anon'],
+            'customer_middlename'    => ['remove'],
+            'customer_lastname'      => ['anonid'],
+            'customer_email'         => ['email'],
+            'remote_ip'              => ['remove'],
+            'customer_dob'           => ['remove'],
+            'customer_gender'        => ['remove'],
 
             //order address, quote address
-            'firstname'            => ['const', 'anon'],
-            'middlename'           => ['remove'],
-            'lastname'             => ['anonid'],
-            'company'              => ['remove'],
-            'vat_id'               => ['remove'],
-            'street'               => ['street'],
-            'city'                 => ['const', 'Anytown'],
-            'email'                => ['email'],
-            'telephone'            => ['const', '********'],
+            'firstname'              => ['const', 'anon'],
+            'middlename'             => ['remove'],
+            'lastname'               => ['anonid'],
+            'company'                => ['remove'],
+            'vat_id'                 => ['remove'],
+            'street'                 => ['street'],
+            'city'                   => ['const', 'Anytown'],
+            'email'                  => ['email'],
+            'telephone'              => ['const', '********'],
 
             //order grid, invoice grid, shipment grid, credit memo grid
-            'shipping_name'        => ['name'],
-            'billing_name'         => ['name'],
+            'shipping_name'          => ['name'],
+            'billing_name'           => ['name'],
 
             //order payment, invoice payment
-            'cc_owner'             => ['name'],
-            'cc_last4'             => ['const', '****'],
-            'cc_number_enc'        => ['remove'],
-            'cc_exp_month'         => ['const', '**'],
-            'cc_exp_year'          => ['const', '**'],
-            'cybersource_token'    => ['remove'],
+            'cc_owner'               => ['name'],
+            'cc_last4'               => ['const', '****'],
+            'cc_number_enc'          => ['remove'],
+            'cc_exp_month'           => ['const', '**'],
+            'cc_exp_year'            => ['const', '**'],
+            'cybersource_token'      => ['remove'],
+            'additional_information' => ['remove'],
+            
 
             //customer
-            'password_hash'        => ['remove'],
+            'password_hash'          => ['remove'],
 
             //tracks
-            'number'                => ['const', '************'],
-            'track_number'          => ['const', '************'],
+            'number'                 => ['const', '************'],
+            'track_number'           => ['const', '************'],
         ];
 
     function __construct()
@@ -567,7 +569,7 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
     }
 
     /***
-     * main run function 
+     * main run function
      */
     public function run()
     {
@@ -579,7 +581,7 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
         if ($this->_action == $this::ACTION_HELP) {
             echo $this->usageHelp();
             return;
-        } 
+        }
 
         //verify that the user wants to do this thing
         if (!$this->_force) {
@@ -621,7 +623,7 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
         $this->_alert("\nProcessing completed for email address {$this->_customerEmail} on website {$this->_websiteName} \n\n");
 
     }
-    
+
     /**
      * Retrieve Usage Help Message
      *
