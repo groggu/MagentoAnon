@@ -205,6 +205,19 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
         }
     }
 
+    private function _listWebsites() {
+
+        $output="Available websites:\n\n";
+        $output.=sprintf("%-30s (%2s) %s","Code","ID", "Name" )."\n";
+        $output.="---------------------------------------------------------\n";
+        $output.=sprintf("%-30s (%2d) %s",'admin',0, 'Admin' )."\n";
+        foreach (Mage::app()->getWebsites() as $websiteid => $website) {
+            //echo "{$website->getCode()} \t\t {$website->getName()} ($websiteid)\n";
+            $output.=sprintf("%-30s (%2d) %s",$website->getCode(),$websiteid, $website->getName() )."\n";
+        }
+        echo $output;
+    }
+
     /***
      * Get all the runtime command elements and setup processing the run
      *
@@ -243,7 +256,8 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
             return true;
         }
 
-        if ($websiteCode = $this->getArg('website')) {
+        $websiteCode = $this->getArg('website');
+        if ($websiteCode!==false) {
             try {
                 $this->_websiteId = Mage::app()->getWebsite($websiteCode)->getId();
                 $this->_websiteName = Mage::app()->getWebsite($websiteCode)->getName();
@@ -254,11 +268,14 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
                     $this->_log($err);
                 }
                 $this->_alert($err);
+
+                $this->_listWebsites();
                 return false;
             }
         } else {
             $err = "\n\nError - Website code is required, see help.\n";
             $this->_alert($err);
+            $this->_listWebsites();
             return false;
         }
 
@@ -633,7 +650,7 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
     {
         return <<<USAGE
 
-Usage:  php -f anonymize.php.php -- [options]
+Usage:  php -f anonymize.php.php [options] --website <website_code>  --email <email_address>
 
   --email <email_address>       Customer email address (required)
   --website <website_code>      Magento website code or id (required)
