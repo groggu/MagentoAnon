@@ -82,7 +82,7 @@ To run, start a command line (ssh, terminal, whatever) session and navigate to M
 
 ## Command Usage
 
-    Usage: php -f anonymize.php.php  [options]   --website <website_code>    --email <email_address>
+    Usage: php -f anonymize.php [options]   --website <website_code>    --email <email_address>
     
       --email <email_address> 	 Customer email address (required)
       --website <website_code> 	Magento website code or id (required)

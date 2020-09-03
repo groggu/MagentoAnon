@@ -649,7 +649,7 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
     {
         return <<<USAGE
 
-Usage:  php -f anonymize.php.php [options] --website <website_code>  --email <email_address>
+Usage:  php -f anonymize.php [options] --website <website_code>  --email <email_address>
 
   --email <email_address>       Customer email address (required)
   --website <website_code>      Magento website code or id (required)
