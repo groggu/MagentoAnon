@@ -212,7 +212,6 @@ class CNA_Customer_Anon extends Mage_Shell_Abstract
         $output.="---------------------------------------------------------\n";
         $output.=sprintf("%-30s (%2d) %s",'admin',0, 'Admin' )."\n";
         foreach (Mage::app()->getWebsites() as $websiteid => $website) {
-            //echo "{$website->getCode()} \t\t {$website->getName()} ($websiteid)\n";
             $output.=sprintf("%-30s (%2d) %s",$website->getCode(),$websiteid, $website->getName() )."\n";
         }
         echo $output;
