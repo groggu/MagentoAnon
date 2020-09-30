@@ -1,5 +1,5 @@
 
-***anonymize.php*** is a **Magento 1** shell (command line) tool used to anonymize customer and order data for GDPR and CCPR compliance.
+***anonymize.php*** is a **Magento 1** shell (command line) tool used to anonymize customer and order data for GDPR and CCPA compliance.
 
 ## The problem
 
